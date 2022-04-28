@@ -1,3 +1,4 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:code_companion/models/contests.dart';
 import 'package:code_companion/services/remote_services.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   Contests? contests;
   var isLoaded = false;
   List<Result>? result;
-  List<Result>? ans = [];
+  List<Result> ans = [];
 
   @override
   void initState() {
@@ -32,12 +33,10 @@ class _HomePageState extends State<HomePage> {
       for (var res in result!) {
         if (today.isBefore(
             DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000))) {
-          ans?.add(res);
-          print(
-              DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000));
+          ans.add(res);
         }
       }
-      ans?.sort((a, b) => a.startTimeSeconds.compareTo(b.startTimeSeconds));
+      ans.sort((a, b) => a.startTimeSeconds.compareTo(b.startTimeSeconds));
       setState(() {
         isLoaded = true;
       });
@@ -55,8 +54,20 @@ class _HomePageState extends State<HomePage> {
   isAfterTime(int time) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(time * 1000);
     DateTime today = DateTime.now();
-    print(date.toString() + " " + today.toString());
+    // print(date.toString() + " " + today.toString());
     return (date.isAfter(today));
+  }
+
+  addToCalendar(Result res) {
+    return Event(
+      title: res.name,
+      description: res.type.toString(),
+      location: 'Event location',
+      startDate:
+          DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000),
+      endDate: DateTime.fromMillisecondsSinceEpoch(
+          res.startTimeSeconds * 1000 + res.durationSeconds * 1000),
+    );
   }
 
   @override
@@ -92,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     // color: Colors.red,
                     Text(
-                      ans![index].name,
+                      ans[index].name,
                       // maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -103,23 +114,30 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
-                        getTime(ans![index].startTimeSeconds),
+                        getTime(ans[index].startTimeSeconds),
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   ],
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 2,
                 child: Align(
                   alignment: Alignment.center,
-                  child: Icon(Icons.calendar_today_outlined),
+                  child: GestureDetector(
+                    onTap: () {
+                      Add2Calendar.addEvent2Cal(addToCalendar(ans[index]));
+                    },
+                    child: const Icon(
+                      Icons.calendar_today_outlined,
+                    ),
+                  ),
                 ),
               ),
             ]);
           }),
-          itemCount: ans?.length,
+          itemCount: ans.length,
         ),
         replacement: const Center(
           child: CircularProgressIndicator(),

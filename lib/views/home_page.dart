@@ -14,10 +14,12 @@ class _HomePageState extends State<HomePage> {
   Contests? contests;
   var isLoaded = false;
   List<Result>? result;
+  List<Result>? ans = [];
 
   @override
   void initState() {
     super.initState();
+    // compareTime(1650378900);
     getContests();
   }
 
@@ -25,6 +27,17 @@ class _HomePageState extends State<HomePage> {
     contests = await RemoteService().getContests();
     result = contests?.result;
     if (contests != null) {
+      var today = DateTime.now();
+
+      for (var res in result!) {
+        if (today.isBefore(
+            DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000))) {
+          ans?.add(res);
+          print(
+              DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000));
+        }
+      }
+      ans?.sort((a, b) => a.startTimeSeconds.compareTo(b.startTimeSeconds));
       setState(() {
         isLoaded = true;
       });
@@ -39,11 +52,18 @@ class _HomePageState extends State<HomePage> {
     return string;
   }
 
+  isAfterTime(int time) {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(time * 1000);
+    DateTime today = DateTime.now();
+    print(date.toString() + " " + today.toString());
+    return (date.isAfter(today));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("API call"),
+        title: const Text("Contests"),
       ),
       body: Visibility(
         visible: isLoaded,
@@ -66,13 +86,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                flex: 9 ,
+                flex: 9,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // color: Colors.red,
                     Text(
-                      result![index].name,
+                      ans![index].name,
                       // maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -83,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
-                        getTime(result![index].startTimeSeconds),
+                        getTime(ans![index].startTimeSeconds),
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -99,7 +119,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ]);
           }),
-          itemCount: contests?.result.length,
+          itemCount: ans?.length,
         ),
         replacement: const Center(
           child: CircularProgressIndicator(),

@@ -7,7 +7,7 @@ As of now the features I want to include and the features already included are:
 
 - [x] Codeforces api
 - [x] adding event to calendar
-- [ ] offline cache / storage.
+- [x] offline cache / storage.
 - [ ] Atcoder API
 - [ ] A state management solution .
 - [ ] UI redesign.

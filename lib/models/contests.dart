@@ -43,8 +43,8 @@ class Result {
 
   int? id;
   String name;
-  Type? type;
-  Phase? phase;
+  String? type;
+  String? phase;
   bool? frozen;
   int durationSeconds;
   int startTimeSeconds;
@@ -53,8 +53,8 @@ class Result {
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
         name: json["name"],
-        type: typeValues.map[json["type"]] as Type,
-        phase: phaseValues.map[json["phase"]] as Phase,
+        type: json["type"],
+        phase: json["phase"],
         frozen: json["frozen"],
         durationSeconds: json["durationSeconds"],
         startTimeSeconds: json["startTimeSeconds"],
@@ -81,14 +81,14 @@ final phaseValues = EnumValues({
   "PENDING_SYSTEM_TEST": Phase.PENDING_SYSTEM_TEST
 });
 
-enum Type { ICPC, CF, IOI }
+enum Type { ICPC, CF, IOI, Null }
 
-final typeValues =
-    EnumValues({"CF": Type.CF, "ICPC": Type.ICPC, "IOI": Type.IOI});
+final typeValues = EnumValues(
+    {"CF": Type.CF, "ICPC": Type.ICPC, "IOI": Type.IOI, "Null": Type.Null});
 
 class EnumValues<T> {
   Map<String, T> map;
-  late Map<T, String> reverseMap;
+  Map<T, String> reverseMap = {};
 
   EnumValues(this.map);
 

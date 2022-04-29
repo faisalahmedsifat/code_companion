@@ -3,9 +3,17 @@ import 'package:intl/intl.dart';
 
 import '../models/contests.dart';
 
-class Utils{
+class Utils {
   static getTime(int time) {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(time * 1000);
+    String d = DateFormat.MMMd().format(date);
+    String ti = DateFormat.jm().format(date);
+    String string = d + " " + ti;
+    return string;
+  }
+
+  static String getTimeNow() {
+    DateTime date = DateTime.now();
     String d = DateFormat.MMMd().format(date);
     String ti = DateFormat.jm().format(date);
     String string = d + " " + ti;

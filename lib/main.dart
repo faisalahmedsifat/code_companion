@@ -1,3 +1,4 @@
+import 'package:code_companion/theme.dart';
 import 'package:code_companion/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -13,10 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: ThemeMode.light,
       title: 'Contests',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: const HomePage(),
     );
   }

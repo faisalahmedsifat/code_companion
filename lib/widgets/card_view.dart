@@ -1,4 +1,5 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/contests.dart';
@@ -21,13 +22,9 @@ class _CardViewState extends State<CardView> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
-            child: Text(
-              'Codeforces',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-              ),
-            ),
+            //TODO: fix it with image asset from files
+            backgroundImage: CachedNetworkImageProvider(
+                "https://news.itmo.ru/images/news/big/917925.jpg"),
           ),
         ),
       ),

@@ -10,4 +10,3 @@ As of now the features I want to include and the features already included are:
 - [x] offline cache / storage.
 - [ ] Atcoder API
 - [ ] A state management solution .
-- [ ] UI redesign.

@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-import 'package:add_2_calendar/add_2_calendar.dart';
-import 'package:code_companion/widgets/card_view.dart';
-import '../models/contests.dart';
-import '../services/remote_services.dart';
+import 'package:code_companion/theme.dart';
+import 'package:code_companion/views/calendar_page.dart';
+import 'package:code_companion/views/contest_list_page.dart';
+import 'package:code_companion/views/profile_page.dart';
+import 'package:code_companion/views/users_page.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../utils/utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,90 +13,64 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Contests? contests;
-  var isLoaded = false;
-  List<Result>? result;
-  List<Result> ans = [];
-  // final box = GetStorage();
-  String lastUpdated = "";
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    retrieveData();
-    getContests();
-  }
+  final pageTitles = const [
+    'Contests',
+    'Calendar',
+    'Users',
+    'Profile',
+  ];
 
-  retrieveData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? stringData = prefs.getString('data');
-    List dataList = jsonDecode(stringData!);
+  final pages = const [
+    ContestListPage(),
+    CalendarPage(),
+    UsersPage(),
+    ProfilePage(),
+  ];
 
-    for (var data in dataList) {
-      ans.add(Result.fromJson(data));
-    }
+  void _onItemTapped(int index) {
     setState(() {
-      isLoaded = true;
-      lastUpdated = prefs.getString('lastupdate')!;
+      _selectedIndex = index;
     });
-  }
-
-  storeData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List dataList = ans.map((e) => e.toJson()).toList();
-    prefs.setString('data', jsonEncode(dataList));
-    prefs.setString('lastupdate', lastUpdated);
-  }
-
-  getContests() async {
-    var today = DateTime.now();
-    contests = await RemoteService().getContests();
-    result = contests?.result;
-    if (contests != null) {
-      ans = [];
-      for (var res in result!) {
-        if (today.isBefore(
-            DateTime.fromMillisecondsSinceEpoch(res.startTimeSeconds * 1000))) {
-          ans.add(res);
-        }
-      }
-      ans.sort((a, b) => a.startTimeSeconds.compareTo(b.startTimeSeconds));
-      storeData();
-      setState(() {
-        isLoaded = true;
-        lastUpdated = "last updated: " + Utils.getTimeNow();
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contests"),
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Center(child: Text(pageTitles[_selectedIndex])),
+        toolbarTextStyle: Theme.of(context).primaryTextTheme.bodyText2,
+        titleTextStyle: Theme.of(context).primaryTextTheme.headline6,
       ),
-      body: Visibility(
-        visible: isLoaded,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Center(child: Text(lastUpdated)),
-            ),
-            Expanded(
-              flex: 15,
-              child: ListView.builder(
-                itemBuilder: ((context, index) {
-                  return CardView(result: ans[index]);
-                }),
-                itemCount: ans.length,
-              ),
-            ),
-          ],
-        ),
-        replacement: const Center(
-          child: CircularProgressIndicator(),
-        ),
+      body: pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: Colors.red,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Contests',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Users',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.accent,
+        onTap: _onItemTapped,
+        unselectedItemColor: AppColors.iconDark,
       ),
     );
   }

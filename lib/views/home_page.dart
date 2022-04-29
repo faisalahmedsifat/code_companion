@@ -37,24 +37,26 @@ class _HomePageState extends State<HomePage> {
     List dataList = jsonDecode(stringData!);
 
     for (var data in dataList) {
-      setState(() {
-        ans.add(Result.fromJson(data));
-        isLoaded = true;
-      });
+      ans.add(Result.fromJson(data));
     }
+    setState(() {
+      isLoaded = true;
+      lastUpdated = prefs.getString('lastupdate')!;
+    });
   }
 
   storeData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List dataList = ans.map((e) => e.toJson()).toList();
     prefs.setString('data', jsonEncode(dataList));
+    prefs.setString('lastupdate', lastUpdated);
   }
 
   getContests() async {
+    var today = DateTime.now();
     contests = await RemoteService().getContests();
     result = contests?.result;
     if (contests != null) {
-      var today = DateTime.now();
       ans = [];
       for (var res in result!) {
         if (today.isBefore(
@@ -66,8 +68,7 @@ class _HomePageState extends State<HomePage> {
       storeData();
       setState(() {
         isLoaded = true;
-        lastUpdated = DateTime.now().toString();
-        // writeStorage();
+        lastUpdated = "last updated: " + Utils.getTimeNow();
       });
     }
   }
@@ -80,11 +81,22 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Visibility(
         visible: isLoaded,
-        child: ListView.builder(
-          itemBuilder: ((context, index) {
-            return CardView(result: ans[index]);
-          }),
-          itemCount: ans.length,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Center(child: Text(lastUpdated)),
+            ),
+            Expanded(
+              flex: 15,
+              child: ListView.builder(
+                itemBuilder: ((context, index) {
+                  return CardView(result: ans[index]);
+                }),
+                itemCount: ans.length,
+              ),
+            ),
+          ],
         ),
         replacement: const Center(
           child: CircularProgressIndicator(),

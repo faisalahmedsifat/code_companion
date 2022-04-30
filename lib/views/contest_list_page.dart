@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/contests.dart';
@@ -20,14 +22,23 @@ class _ContestListPageState extends State<ContestListPage> {
   var isLoaded = false;
   List<Result>? result;
   List<Result> ans = [];
-  // final box = GetStorage();
   String lastUpdated = "";
+  bool isOnline = true;
 
   @override
   void initState() {
     super.initState();
     retrieveData();
     getContests();
+  }
+
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('www.codeforces.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
   }
 
   retrieveData() async {
@@ -53,7 +64,12 @@ class _ContestListPageState extends State<ContestListPage> {
 
   getContests() async {
     var today = DateTime.now();
-    contests = await RemoteService().getContests();
+    isOnline = await hasNetwork();
+    try {
+      contests = await RemoteService().getContests();
+    } catch (Ex) {
+      print('connection error');
+    }
     result = contests?.result;
     if (contests != null) {
       ans = [];
@@ -71,6 +87,7 @@ class _ContestListPageState extends State<ContestListPage> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -79,7 +96,10 @@ class _ContestListPageState extends State<ContestListPage> {
         children: [
           Expanded(
             flex: 1,
-            child: Center(child: Text(lastUpdated)),
+            child: Center(
+                child: isOnline
+                    ? Text(lastUpdated)
+                    : Text('Connection error.. ' + lastUpdated)),
           ),
           Expanded(
             flex: 15,

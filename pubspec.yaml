@@ -32,10 +32,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  fluttertoast: ^8.0.9
   get_storage: ^2.0.3
   google_fonts: ^2.3.2
   http: ^0.13.4
   intl: ^0.17.0
+  pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.13
 
 dev_dependencies:

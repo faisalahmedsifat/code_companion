@@ -33,15 +33,17 @@ class _ContestListPageState extends State<ContestListPage> {
   retrieveData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? stringData = prefs.getString('data');
-    List dataList = jsonDecode(stringData!);
+    if (stringData != null) {
+      List dataList = jsonDecode(stringData as String);
 
-    for (var data in dataList) {
-      ans.add(Result.fromJson(data));
+      for (var data in dataList) {
+        ans.add(Result.fromJson(data));
+      }
+      setState(() {
+        isLoaded = true;
+        lastUpdated = prefs.getString('lastupdate')!;
+      });
     }
-    setState(() {
-      isLoaded = true;
-      lastUpdated = prefs.getString('lastupdate')!;
-    });
   }
 
   storeData() async {
@@ -71,6 +73,7 @@ class _ContestListPageState extends State<ContestListPage> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Visibility(

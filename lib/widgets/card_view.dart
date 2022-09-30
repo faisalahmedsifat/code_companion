@@ -22,7 +22,6 @@ class _CardViewState extends State<CardView> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
-            //TODO: fix it with image asset from files
             backgroundImage: CachedNetworkImageProvider(
                 "https://news.itmo.ru/images/news/big/917925.jpg"),
           ),

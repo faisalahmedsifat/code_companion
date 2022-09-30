@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:code_companion/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -16,21 +17,24 @@ class _UserCardViewState extends State<UserCardView> {
   Widget build(BuildContext context) {
     // var ref = widget;
     return Row(children: [
-      const Expanded(
-        flex: 2,
-        child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Image(image: AssetImage('images/code-forces.png'))),
-      ),
+      Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            // child: Image(image: AssetImage('images/code-forces.png'))),
+            child: CircleAvatar(
+              backgroundImage:
+                  CachedNetworkImageProvider(widget.user.titlePhoto as String),
+              backgroundColor: Colors.white,
+            ),
+          )),
       Expanded(
         flex: 9,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // color: Colors.red,
             Text(
               widget.user.handle as String,
-              // maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -40,7 +44,6 @@ class _UserCardViewState extends State<UserCardView> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                // Utils.getTime(widget.user as int),
                 widget.user.rating.toString(),
                 style: const TextStyle(color: Colors.grey),
               ),

@@ -1,5 +1,6 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:code_companion/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../models/contests.dart';
@@ -20,12 +21,15 @@ class _CardViewState extends State<CardView> {
       const Expanded(
         flex: 2,
         child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(
-                "https://news.itmo.ru/images/news/big/917925.jpg"),
-          ),
-        ),
+            padding: EdgeInsets.all(8.0),
+            child:
+                // CircleAvatar(
+                //   //   backgroundImage: CachedNetworkImageProvider(
+                //   //       "https://news.itmo.ru/images/news/big/917925.jpg"),
+                //   backgroundColor: Colors.white,
+                //   // backgroundImage: Image.asset('images/code-forces.png'),
+                // ),
+                Image(image: AssetImage('images/code-forces.png'))),
       ),
       Expanded(
         flex: 9,
@@ -62,6 +66,7 @@ class _CardViewState extends State<CardView> {
             },
             child: const Icon(
               Icons.calendar_today_outlined,
+              color: AppColors.iconColor,
             ),
           ),
         ),

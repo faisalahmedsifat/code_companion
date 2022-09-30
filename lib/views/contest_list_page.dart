@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:code_companion/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../models/contests.dart';
 import '../services/remote_services.dart';
@@ -67,10 +69,21 @@ class _ContestListPageState extends State<ContestListPage> {
       }
       ans.sort((a, b) => a.startTimeSeconds.compareTo(b.startTimeSeconds));
       storeData();
-      setState(() {
-        isLoaded = true;
-        lastUpdated = "last updated: " + Utils.getTimeNow();
-      });
+      try {
+        setState(() {
+          isLoaded = true;
+          lastUpdated = "last updated: " + Utils.getTimeNow();
+        });
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: "Contests Loading...",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: AppColors.toastColor,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     }
   }
 

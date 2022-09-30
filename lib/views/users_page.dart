@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:code_companion/services/remote_services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/users/result.dart';
 import '../models/users/users.dart';
+import '../theme.dart';
 import '../utils/utils.dart';
 import '../widgets/user_card_view.dart';
 
@@ -69,11 +71,22 @@ class _UsersPageState extends State<UsersPage> {
       }
       ans.sort((a, b) => b.rating.compareTo(a.rating));
       // storeData();
-      setState(() {
-        isLoaded = true;
-        storeData();
-        lastUpdated = "last updated: " + Utils.getTimeNow();
-      });
+      try {
+        setState(() {
+          isLoaded = true;
+          storeData();
+          lastUpdated = "last updated: " + Utils.getTimeNow();
+        });
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: "Users Loading...",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: AppColors.toastColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     }
   }
 

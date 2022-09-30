@@ -13,6 +13,7 @@ abstract class AppColors {
   static const cardLight = Color(0xFFF9FAFE);
   static const cardDark = Color(0xFF303334);
   static const iconColor = Color(0xFFCE8100);
+  static const toastColor = Color.fromARGB(0, 80, 80, 80);
 }
 
 abstract class _LightColors {

@@ -7,7 +7,7 @@ class User {
   String? country;
   int? lastOnlineTimeSeconds;
   String? city;
-  int rating;
+  int? rating = 0;
   int? friendOfCount;
   String? titlePhoto;
   String? handle;
@@ -16,7 +16,7 @@ class User {
   int? contribution;
   String? organization;
   String? rank;
-  int maxRating;
+  int? maxRating;
   int? registrationTimeSeconds;
   String? maxRank;
   String? email;
@@ -26,7 +26,7 @@ class User {
     this.country,
     this.lastOnlineTimeSeconds,
     this.city,
-    required this.rating,
+    this.rating,
     this.friendOfCount,
     this.titlePhoto,
     this.handle,
@@ -35,7 +35,7 @@ class User {
     this.contribution,
     this.organization,
     this.rank,
-    required this.maxRating,
+    this.maxRating,
     this.registrationTimeSeconds,
     this.maxRank,
     this.email,
@@ -103,7 +103,7 @@ class User {
     String? country,
     int? lastOnlineTimeSeconds,
     String? city,
-    required int rating,
+    int rating = 0,
     int? friendOfCount,
     String? titlePhoto,
     String? handle,

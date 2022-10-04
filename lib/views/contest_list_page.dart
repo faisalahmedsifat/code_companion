@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:code_companion/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,7 +30,7 @@ class _ContestListPageState extends State<ContestListPage> {
   void initState() {
     super.initState();
     retrieveData();
-    getContests();
+    // getContests();
   }
 
   retrieveData() async {
@@ -75,16 +76,12 @@ class _ContestListPageState extends State<ContestListPage> {
           lastUpdated = "last updated: " + Utils.getTimeNow();
         });
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: "Contests Loading...",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: AppColors.toastColor,
-            timeInSecForIosWeb: 1,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        if (kDebugMode) {
+          print(e.toString());
+        }
       }
     }
+    getContests();
   }
 
   @override

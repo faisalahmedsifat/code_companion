@@ -30,7 +30,8 @@ class RemoteService {
     if (response.statusCode == 200) {
       var json = response.body;
       return Users.fromJson(json);
+    } else {
+      throw Exception('no user found');
     }
-    return Users(status: "400", users: []);
   }
 }

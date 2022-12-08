@@ -26,7 +26,7 @@ class Utils {
     return (date.isAfter(today));
   }
 
-  static addToCalendar(Result res) {
+  static addToCalendar(Contest res) {
     return Event(
       title: res.name,
       description: res.type.toString(),

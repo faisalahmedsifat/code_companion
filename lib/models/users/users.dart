@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
-import 'result.dart';
+import 'user.dart';
 
 class Users {
   String? status;

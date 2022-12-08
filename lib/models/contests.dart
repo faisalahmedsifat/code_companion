@@ -1,26 +1,24 @@
-// To parse this JSON data, do
-//
-//     final contests = contestsFromJson(jsonString);
-
 import 'dart:convert';
 
-Contests contestsFromJson(String str) => Contests.fromJson(json.decode(str));
+ContestsApiResult contestsFromJson(String str) =>
+    ContestsApiResult.fromJson(json.decode(str));
 
-String contestsToJson(Contests data) => json.encode(data.toJson());
+String contestsToJson(ContestsApiResult data) => json.encode(data.toJson());
 
-class Contests {
-  Contests({
+class ContestsApiResult {
+  ContestsApiResult({
     required this.status,
     required this.result,
   });
 
   String status;
-  List<Result> result;
+  List<Contest> result;
 
-  factory Contests.fromJson(Map<String, dynamic> json) => Contests(
+  factory ContestsApiResult.fromJson(Map<String, dynamic> json) =>
+      ContestsApiResult(
         status: json["status"],
         result:
-            List<Result>.from(json["result"].map((x) => Result.fromJson(x))),
+            List<Contest>.from(json["result"].map((x) => Contest.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +27,8 @@ class Contests {
       };
 }
 
-class Result {
-  Result({
+class Contest {
+  Contest({
     this.id,
     required this.name,
     this.type,
@@ -50,7 +48,7 @@ class Result {
   int startTimeSeconds;
   int? relativeTimeSeconds;
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory Contest.fromJson(Map<String, dynamic> json) => Contest(
         id: json["id"],
         name: json["name"],
         type: json["type"],

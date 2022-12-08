@@ -8,7 +8,7 @@ import '../utils/utils.dart';
 
 class CardView extends StatefulWidget {
   CardView({Key? key, required this.result}) : super(key: key);
-  Result result;
+  Contest result;
 
   @override
   State<CardView> createState() => _CardViewState();

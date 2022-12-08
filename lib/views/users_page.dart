@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/users/result.dart';
+import '../models/users/user.dart';
 import '../models/users/users.dart';
 import '../theme.dart';
 import '../utils/utils.dart';
@@ -158,18 +158,19 @@ class _UsersPageState extends State<UsersPage> {
   checkIfUserExists(String name) async {
     try {
       users = await RemoteService().getUsers([name]);
+      addedUserNames.add(name);
+      Navigator.pop(context);
+      getUsers();
     } catch (e) {
       Fluttertoast.showToast(
           msg: "No user found",
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
+          gravity: ToastGravity.SNACKBAR,
           timeInSecForIosWeb: 1,
           backgroundColor: AppColors.toastColor,
-          textColor: Colors.white,
+          textColor: Colors.red,
           fontSize: 16.0);
     }
-    addedUserNames.add(name);
-    getUsers();
   }
 
   @override
